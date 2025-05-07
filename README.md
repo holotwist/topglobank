@@ -1,2 +1,2 @@
 # topglobank
-The next biggest coin in the world
+The next biggest bank in the world
