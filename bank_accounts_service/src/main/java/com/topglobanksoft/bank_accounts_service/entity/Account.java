@@ -27,7 +27,7 @@ public class Account {
 
     @NotBlank(message = "Account number cannot be empty")
     @Size(max = 50)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50) // Consider unique = true if accountNumber should be unique globally or per bank
     private String accountNumber;
 
     @NotBlank(message = "Account type cannot be empty")
@@ -35,9 +35,9 @@ public class Account {
     @Column(nullable = false, length = 50)
     private String accountType;
 
-    @NotNull(message = "El ID del usuario es obligatorio")
-    @Column(nullable = false, name = "user_id")
-    private Long userId;
+    @NotNull(message = "User ID is required")
+    @Column(nullable = false, name = "user_id", length = 36) // Keycloak sub is UUID (String)
+    private String userId; // Changed from Long
 
     @Column(updatable = false)
     private LocalDateTime creationDate;

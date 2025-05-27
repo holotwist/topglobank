@@ -4,7 +4,7 @@ import com.topglobanksoft.bank_accounts_service.dto.AccountCreateDTO;
 import com.topglobanksoft.bank_accounts_service.dto.AccountDTO;
 import com.topglobanksoft.bank_accounts_service.dto.AccountUpdateDTO;
 import com.topglobanksoft.bank_accounts_service.entity.Account;
-import com.topglobanksoft.bank_accounts_service.exception.AccountAccessException;
+// import com.topglobanksoft.bank_accounts_service.exception.AccountAccessException; // Not directly used
 import com.topglobanksoft.bank_accounts_service.exception.ResourceNotFoundException;
 import com.topglobanksoft.bank_accounts_service.mapper.AccountMapper;
 import com.topglobanksoft.bank_accounts_service.repository.AccountRepository;
@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public AccountDTO addAccount(AccountCreateDTO accountCreateDTO, Long userId) {
+    public AccountDTO addAccount(AccountCreateDTO accountCreateDTO, String userId) { // Changed from Long
         if (accountRepository.existsByAccountNumberAndUserId(accountCreateDTO.getAccountNumber(), userId)) {
             throw new IllegalArgumentException("An account with number '" + accountCreateDTO.getAccountNumber() + "' already exists for this user.");
         }
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AccountDTO> getAccountByUser(Long userId) {
+    public List<AccountDTO> getAccountByUser(String userId) { // Changed from Long
         List<Account> accounts = accountRepository.findByUserId(userId);
         return accounts.stream()
                 .map(accountMapper::toDto)
@@ -46,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional(readOnly = true)
-    public AccountDTO getAccountByIdAndUser(Long accountId, Long userId) {
+    public AccountDTO getAccountByIdAndUser(Long accountId, String userId) { // Changed from Long
         Account account = accountRepository.findByAccountIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId + " for this user."));
         return accountMapper.toDto(account);
@@ -54,11 +54,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public AccountDTO updateAccount(Long accountId, Long userId, AccountUpdateDTO accountUpdateDTO) {
+    public AccountDTO updateAccount(Long accountId, String userId, AccountUpdateDTO accountUpdateDTO) { // Changed from Long
         Account account = accountRepository.findByAccountIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId + " for this user."));
 
-        // Prevent updating account number to one that already exists for the user, if different from current
         if (accountUpdateDTO.getAccountNumber() != null &&
                 !accountUpdateDTO.getAccountNumber().equals(account.getAccountNumber()) &&
                 accountRepository.existsByAccountNumberAndUserId(accountUpdateDTO.getAccountNumber(), userId)) {
@@ -72,13 +71,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public void deleteAccount(Long accountId, Long userId) {
+    public void deleteAccount(Long accountId, String userId) { // Changed from Long
         Account account = accountRepository.findByAccountIdAndUserId(accountId, userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id " + accountId + " for this user."));
         accountRepository.delete(account);
     }
-
-    // --- Admin Operations ---
 
     @Override
     @Transactional(readOnly = true)

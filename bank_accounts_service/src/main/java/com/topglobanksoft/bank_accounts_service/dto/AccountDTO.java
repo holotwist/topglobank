@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 public class AccountDTO {
     private Long accountId;
     private String bankName;
-    private String accountNumber; // FUTURE: we need to consider masking this in DTOs for non-owners
+    private String accountNumber;
     private String accountType;
-    private Long userId;
+    private String userId;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
 }

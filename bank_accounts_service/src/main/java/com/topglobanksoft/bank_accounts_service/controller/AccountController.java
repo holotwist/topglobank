@@ -4,121 +4,101 @@ import com.topglobanksoft.bank_accounts_service.dto.AccountCreateDTO;
 import com.topglobanksoft.bank_accounts_service.dto.AccountDTO;
 import com.topglobanksoft.bank_accounts_service.dto.AccountUpdateDTO;
 import com.topglobanksoft.bank_accounts_service.service.AccountService;
-// import com.topglobanksoft.bank_accounts_service.util.JwtUtil; // Utility class for extracting claims
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-// import org.springframework.security.core.Authentication; // To get the token
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt; // Represents the decoded token
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-// import java.util.Map; // Not used
 
 @RestController
 @RequestMapping("/api/v1/accounts")
 @RequiredArgsConstructor
+@Slf4j // Added for logging
 public class AccountController {
 
     private final AccountService accountService;
 
-    // Helper method to get user ID from JWT token
-    // The claim containing the ID may vary ('sub', 'userId', 'id', etc.)
-    // We need to ensure the Auth Server includes this claim
-    private Long getUserIdFromToken(Jwt jwt) {
-        // Example: Assuming ID is in a claim called "userId"
-        Object userIdClaim = jwt.getClaim("userId"); // Standard claim often used for user ID
-        if (userIdClaim == null) {
-            // Fallback to 'sub' (subject) claim if 'userId' is not present
-            userIdClaim = jwt.getSubject();
+    // Helper method to get user ID (Keycloak 'sub') from JWT token
+    private String getUserIdFromToken(Jwt jwt) {
+        String userId = jwt.getSubject(); // 'sub' claim is the Keycloak user ID (UUID)
+        if (userId == null || userId.isBlank()) {
+            log.error("Keycloak 'sub' claim (userId) is missing or blank in JWT: {}", jwt.getClaims());
+            throw new IllegalArgumentException("User ID ('sub' claim) not found in JWT token");
         }
-
-        if (userIdClaim instanceof Integer) {
-            return ((Integer) userIdClaim).longValue();
-        } else if (userIdClaim instanceof Long) {
-            return (Long) userIdClaim;
-        } else if (userIdClaim instanceof String) {
-            try {
-                return Long.parseLong((String) userIdClaim);
-            } catch (NumberFormatException e) {
-                // If parsing 'sub' as Long fails, it might be a non-numeric subject.
-                // Log this or handle as appropriate.
-            }
-        }
-        throw new IllegalArgumentException("Could not find or parse user ID (claim 'userId' or 'sub') in JWT token");
+        return userId;
     }
 
-
-    // --- Endpoints for Users (RF-006, RF-014) ---
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<AccountDTO> agregarAccount(@Valid @RequestBody AccountCreateDTO cuentaCreateDTO,
-                                                     @AuthenticationPrincipal Jwt jwt) {
-        Long usuarioId = getUserIdFromToken(jwt);
-        AccountDTO nuevaAccount = accountService.addAccount(cuentaCreateDTO, usuarioId);
-        return new ResponseEntity<>(nuevaAccount, HttpStatus.CREATED);
+    public ResponseEntity<AccountDTO> addAccount(@Valid @RequestBody AccountCreateDTO accountCreateDTO,
+                                                 @AuthenticationPrincipal Jwt jwt) {
+        String userId = getUserIdFromToken(jwt);
+        AccountDTO newAccount = accountService.addAccount(accountCreateDTO, userId);
+        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
     }
 
-    @GetMapping("/mis-cuentas")
+    @GetMapping("/mis-accounts")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<AccountDTO>> obtenerMisAccounts(@AuthenticationPrincipal Jwt jwt) {
-        Long usuarioId = getUserIdFromToken(jwt);
-        List<AccountDTO> cuentas = accountService.getAccountByUser(usuarioId);
-        return ResponseEntity.ok(cuentas);
+    public ResponseEntity<List<AccountDTO>> getMyAccounts(@AuthenticationPrincipal Jwt jwt) {
+        String userId = getUserIdFromToken(jwt);
+        List<AccountDTO> accounts = accountService.getAccountByUser(userId);
+        return ResponseEntity.ok(accounts);
     }
 
-    @GetMapping("/{idAccount}")
+    @GetMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<AccountDTO> obtenerMiAccountPorId(@PathVariable Long idAccount,
-                                                            @AuthenticationPrincipal Jwt jwt) {
-        Long usuarioId = getUserIdFromToken(jwt);
-        AccountDTO cuenta = accountService.getAccountByIdAndUser(idAccount, usuarioId);
+    public ResponseEntity<AccountDTO> getMyAccountById(@PathVariable Long accountId,
+                                                       @AuthenticationPrincipal Jwt jwt) {
+        String userId = getUserIdFromToken(jwt);
+        AccountDTO cuenta = accountService.getAccountByIdAndUser(accountId, userId);
         return ResponseEntity.ok(cuenta);
     }
 
-    @PutMapping("/{idAccount}")
+    @PutMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<AccountDTO> actualizarMiAccount(@PathVariable Long idAccount,
-                                                          @Valid @RequestBody AccountUpdateDTO accountUpdateDTO,
-                                                          @AuthenticationPrincipal Jwt jwt) {
-        Long usuarioId = getUserIdFromToken(jwt);
-        AccountDTO cuentaActualizada = accountService.updateAccount(idAccount, usuarioId, accountUpdateDTO);
+    public ResponseEntity<AccountDTO> updateMyAccount(@PathVariable Long accountId,
+                                                      @Valid @RequestBody AccountUpdateDTO accountUpdateDTO,
+                                                      @AuthenticationPrincipal Jwt jwt) {
+        String userId = getUserIdFromToken(jwt);
+        AccountDTO cuentaActualizada = accountService.updateAccount(accountId, userId, accountUpdateDTO);
         return ResponseEntity.ok(cuentaActualizada);
     }
 
-    @DeleteMapping("/{idAccount}")
+    @DeleteMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> eliminarMiAccount(@PathVariable Long idAccount,
-                                                  @AuthenticationPrincipal Jwt jwt) {
-        Long usuarioId = getUserIdFromToken(jwt);
-        accountService.deleteAccount(idAccount, usuarioId);
+    public ResponseEntity<Void> deleteMyAccount(@PathVariable Long accountId,
+                                                @AuthenticationPrincipal Jwt jwt) {
+        String userId = getUserIdFromToken(jwt);
+        accountService.deleteAccount(accountId, userId);
         return ResponseEntity.noContent().build();
     }
 
-    // --- Endpoints for Administrators (RF-010) ---
-
+    // Admin endpoints remain largely the same in signature, as they don't use userId from token for operations.
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AccountDTO>> listarTodasLasAccountsAdmin() {
-        List<AccountDTO> cuentas = accountService.listAllAccountsAdmin();
-        return ResponseEntity.ok(cuentas);
+    public ResponseEntity<List<AccountDTO>> listAllAccountsAdmin() {
+        List<AccountDTO> accounts = accountService.listAllAccountsAdmin();
+        return ResponseEntity.ok(accounts);
     }
 
-    @GetMapping("/admin/{idAccount}")
+    @GetMapping("/admin/{accountId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AccountDTO> obtenerAccountPorIdAdmin(@PathVariable Long idAccount) {
-        AccountDTO cuenta = accountService.getAccountByIdAdmin(idAccount);
+    public ResponseEntity<AccountDTO> getAccountByIdAdmin(@PathVariable Long accountId) {
+        AccountDTO cuenta = accountService.getAccountByIdAdmin(accountId);
         return ResponseEntity.ok(cuenta);
     }
 
-    @DeleteMapping("/admin/{idAccount}")
+    @DeleteMapping("/admin/{accountId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteAccountAdmin(@PathVariable Long idAccount) {
-        accountService.deleteAccountAdmin(idAccount);
+    public ResponseEntity<Void> deleteAccountAdmin(@PathVariable Long accountId) {
+        accountService.deleteAccountAdmin(accountId);
         return ResponseEntity.noContent().build();
     }
 }

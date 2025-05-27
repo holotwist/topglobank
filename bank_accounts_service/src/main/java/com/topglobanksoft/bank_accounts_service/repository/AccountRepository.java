@@ -10,15 +10,11 @@ import java.util.Optional;
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
-    // Find all accounts for a specific user
-    List<Account> findByUserId(Long userId);
+    List<Account> findByUserId(String userId);
 
-    // Finds a specific account by its ID and the ID of the user owner
-    Optional<Account> findByAccountIdAndUserId(Long accountId, Long userId);
+    Optional<Account> findByAccountIdAndUserId(Long accountId, String userId);
 
-    // Verifies if a specific account belongs to a user
-    boolean existsByAccountIdAndUserId(Long accountId, Long userId);
+    boolean existsByAccountIdAndUserId(Long accountId, String userId);
 
-    // It could be useful to avoid duplicates per user
-    boolean existsByAccountNumberAndUserId(String accountNumber, Long userId);
+    boolean existsByAccountNumberAndUserId(String accountNumber, String userId);
 }
