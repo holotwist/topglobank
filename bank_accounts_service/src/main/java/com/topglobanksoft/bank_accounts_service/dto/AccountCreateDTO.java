@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//DTO Used to receive data when an account is being created
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

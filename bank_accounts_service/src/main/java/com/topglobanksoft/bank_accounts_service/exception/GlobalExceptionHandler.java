@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+//Customizable exception service from Spring
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

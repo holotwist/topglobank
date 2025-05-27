@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
+
+//Base account data
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
