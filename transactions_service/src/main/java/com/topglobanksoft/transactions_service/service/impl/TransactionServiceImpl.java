@@ -33,13 +33,18 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+/**
+ * Service implementation for transaction operations
+ */
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final CategoryRepository categoryRepository;
     private final TransactionMapper transactionMapper;
     private final KafkaProducerService kafkaProducerService;
-
+    /**
+     * Processes deposit transaction
+     */
     @Override
     @Transactional
     public TransactionDTO performDeposit(String userId, DepositRequestDTO dto) { // Changed userId to String
@@ -62,7 +67,9 @@ public class TransactionServiceImpl implements TransactionService {
         publishBalanceUpdateEvent(savedTransaction);
         return transactionMapper.toDto(savedTransaction);
     }
-
+    /**
+     * Processes withdrawal transaction
+     */
     @Override
     @Transactional
     public TransactionDTO performWithdrawal(String userId, WithdrawalRequestDTO dto) { // Changed userId to String
@@ -85,7 +92,9 @@ public class TransactionServiceImpl implements TransactionService {
         publishBalanceUpdateEvent(savedTransaction);
         return transactionMapper.toDto(savedTransaction);
     }
-
+    /**
+     * Processes transfer transaction (sender side)
+     */
     @Override
     @Transactional
     public TransactionDTO performTransfer(String senderUserId, TransferRequestDTO dto) { // Changed senderUserId to String
@@ -194,7 +203,9 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionProcessingException("Failed to publish balance update event", e);
         }
     }
-
+    /**
+     * Gets filtered transactions for user
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<TransactionDTO> getTransactionsForUser(String userId, TransactionFilterDTO filters, Pageable pageable) { // Changed
@@ -202,6 +213,9 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
 
+    /**
+     * Gets transaction by ID for specific user
+     */
     @Override
     @Transactional(readOnly = true)
     public TransactionDTO getTransactionByIdForUser(Long transactionId, String userId) { // Changed
@@ -209,14 +223,18 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id: " + transactionId + " for user " + userId));
         return transactionMapper.toDto(transaction);
     }
-
+    /**
+     * Gets all transactions (admin view)
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<TransactionDTO> getAllTransactionsAdmin(TransactionFilterDTO filters, Pageable pageable) {
         Specification<Transaction> spec = buildSpecification(null, filters); // null userId for admin
         return transactionRepository.findAll(spec, pageable).map(transactionMapper::toDto);
     }
-
+    /**
+     * Gets transaction by ID (admin view)
+     */
     @Override
     @Transactional(readOnly = true)
     public TransactionDTO getTransactionByIdAdmin(Long transactionId) {
@@ -224,7 +242,9 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id: " + transactionId));
         return transactionMapper.toDto(transaction);
     }
-
+    /**
+     * Gets user transactions within date range
+     */
     @Override
     @Transactional(readOnly = true)
     public List<TransactionDTO> getTransactionsByUserIdAndDateRange(String queryUserId, LocalDate startDate, LocalDate endDate) { // Changed
@@ -243,6 +263,9 @@ public class TransactionServiceImpl implements TransactionService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gets all transactions within date range (admin view)
+     */
     @Override
     @Transactional(readOnly = true)
     public List<TransactionDTO> getAllTransactionsByDateRange(LocalDate startDate, LocalDate endDate) {

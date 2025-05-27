@@ -24,11 +24,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
+/**
+ * Handles security configuration for the service
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    // Configures HTTP security rules
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -39,11 +43,11 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
+    // Converts JWT claims to Spring Security authorities
     @Bean
     @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

@@ -13,7 +13,9 @@ import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
-
+/**
+ * Fetches user data from User Service
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,7 +23,10 @@ public class UserClientServiceImpl implements UserClientService {
 
     @Qualifier("userWebClient") // Specify which WebClient bean to use
     private final WebClient userWebClient;
-
+    /**
+     * Gets all users with retry/error handling
+     * @return Flux of user info (id, name, balance)
+     */
     @Override
     public Flux<UserInfoDTO> getAllUsersInfo() {
         log.debug("Fetching all users info from User Service");

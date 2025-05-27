@@ -15,11 +15,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+/**
+ * Configuration for Kafka producer settings
+ */
 public class KafkaProducerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-
+    /**
+     * Creates producer factory for balance update events
+     */
     @Bean
     public ProducerFactory<String, BalanceUpdateEventDTO> balanceUpdateEventProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
@@ -30,7 +35,9 @@ public class KafkaProducerConfig {
         configProps.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false); // Usually false for DTOs if consumer knows type
         return new DefaultKafkaProducerFactory<>(configProps);
     }
-
+    /**
+     * Creates Kafka template for balance update events
+     */
     @Bean
     public KafkaTemplate<String, BalanceUpdateEventDTO> balanceUpdateEventKafkaTemplate() {
         return new KafkaTemplate<>(balanceUpdateEventProducerFactory());

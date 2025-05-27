@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+/**
+ * Transport object for API data exchange
+ */
 public class TransactionInfoDTO {
     private Long transactionId;
     private LocalDateTime date;

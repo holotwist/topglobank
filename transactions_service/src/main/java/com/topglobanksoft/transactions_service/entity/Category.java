@@ -7,23 +7,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 // import org.springframework.data.annotation.Id; // Remove this if using JPA @Id
-
+/**
+ * Represents a transaction category
+ */
 @Entity
 @Table(name = "categories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
-
+    /**
+     * Unique category identifier
+     */
     @jakarta.persistence.Id // JPA standard ID
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId; // Renamed from idCategoria for consistency with id
-
+    /**
+     * Category name (unique)
+     */
     @NotBlank(message = "Category name cannot be empty")
     @Size(max = 50)
     @Column(nullable = false, unique = true, length = 50)
     private String name; // Renamed from nombre
-
+    /**
+     * Optional category description
+     */
     @Size(max = 255)
     private String description; // Renamed from descripcion
 

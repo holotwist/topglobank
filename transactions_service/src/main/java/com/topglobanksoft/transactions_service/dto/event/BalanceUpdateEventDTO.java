@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+/**
+ * Transport object for API data exchange
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

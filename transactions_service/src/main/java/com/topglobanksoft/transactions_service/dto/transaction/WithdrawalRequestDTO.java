@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-
+/**
+ * Transport object for API data exchange
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

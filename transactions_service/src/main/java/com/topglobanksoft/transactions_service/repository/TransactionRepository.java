@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Repository for Transaction entities with custom query methods
+ */
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
 
@@ -26,7 +28,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     Page<Transaction> findByUserIdAndDateBetweenOrderByDateDesc(String userId, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
     boolean existsByCategoryCategoryId(Long categoryId);
-
+    /**
+     * Advanced search with optional filters
+     * @param userId Optional user filter
+     * @param type Optional transaction type filter
+     * @param startDate Optional start date filter (inclusive)
+     * @param endDate Optional end date filter (inclusive)
+     * @param categoryId Optional category filter
+     * @param pageable Pagination parameters
+     * @return Filtered and paginated transactions (newest first)
+     */
     @Query("SELECT t FROM Transaction t WHERE " +
             "(:userId IS NULL OR t.userId = :userId) AND " + // userId is String now
             "(:type IS NULL OR t.type = :type) AND "           +

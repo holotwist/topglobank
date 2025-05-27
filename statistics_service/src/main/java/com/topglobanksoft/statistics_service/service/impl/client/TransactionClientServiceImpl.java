@@ -14,7 +14,9 @@ import reactor.util.retry.Retry;
 
 import java.time.Duration;
 import java.time.LocalDate;
-
+/**
+ * Implementation for transaction data retrieval from Transaction Service
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +24,12 @@ public class TransactionClientServiceImpl implements TransactionClientService {
 
     @Qualifier("transactionWebClient")
     private final WebClient transactionWebClient;
-
+    /**
+     * Retrieves transactions within date range with retry logic
+     * @param startDate Start date (inclusive)
+     * @param endDate End date (inclusive)
+     * @return Flux of transactions with retry/error handling
+     */
     @Override
     public Flux<TransactionInfoDTO> getAllTransactionsInfo(LocalDate startDate, LocalDate endDate) {
         log.debug("Fetching all transactions info from Transaction Service for period [{} - {}] for statistics", startDate, endDate);
