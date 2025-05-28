@@ -20,7 +20,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Handles transaction operations (deposits, withdrawals, transfers)
+ */
 @RestController
 @RequestMapping("/api/v1/transactions")
 @RequiredArgsConstructor
@@ -28,7 +30,9 @@ import java.util.Map;
 public class TransactionController {
 
     private final TransactionService transactionService;
-
+    /**
+     * Extracts user ID from JWT token
+     */
     private String getUserIdFromToken(Jwt jwt) { // Changed return type to String
         String userId = jwt.getSubject();
         if (userId == null || userId.isBlank()) {
@@ -37,7 +41,9 @@ public class TransactionController {
         }
         return userId;
     }
-
+    /**
+     * Processes deposit request (user)
+     */
     @PostMapping("/deposit")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TransactionDTO> deposit(@Valid @RequestBody DepositRequestDTO depositRequestDTO,
@@ -46,7 +52,9 @@ public class TransactionController {
         TransactionDTO transaction = transactionService.performDeposit(userId, depositRequestDTO);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
-
+    /**
+     * Processes withdrawal request (user)
+     */
     @PostMapping("/withdraw")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TransactionDTO> withdraw(@Valid @RequestBody WithdrawalRequestDTO withdrawalRequestDTO,
@@ -55,7 +63,9 @@ public class TransactionController {
         TransactionDTO transaction = transactionService.performWithdrawal(userId, withdrawalRequestDTO);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
-
+    /**
+     * Processes transfer request (user)
+     */
     @PostMapping("/transfer")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TransactionDTO> transfer(@Valid @RequestBody TransferRequestDTO transferRequestDTO,
@@ -64,6 +74,9 @@ public class TransactionController {
         TransactionDTO transaction = transactionService.performTransfer(senderUserId, transferRequestDTO);
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
     }
+    /**
+     * Gets paginated transactions for current user (user)
+     */
 
     @GetMapping("/my-transactions") // "mis-transacciones" consistent with bank_accounts
     @PreAuthorize("hasRole('USER')")
@@ -75,7 +88,9 @@ public class TransactionController {
         Page<TransactionDTO> transactions = transactionService.getTransactionsForUser(userId, filters, pageable);
         return ResponseEntity.ok(transactions);
     }
-
+    /**
+     * Gets single transaction by ID (user)
+     */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<TransactionDTO> getMyTransactionById(@PathVariable Long id,
@@ -85,7 +100,9 @@ public class TransactionController {
         return ResponseEntity.ok(transaction);
     }
 
-
+    /**
+     * Gets all transactions (admin)
+     */
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<TransactionDTO>> getAllTransactionsAdmin(
@@ -94,13 +111,18 @@ public class TransactionController {
         Page<TransactionDTO> transactions = transactionService.getAllTransactionsAdmin(filters, pageable);
         return ResponseEntity.ok(transactions);
     }
-
+    /**
+     * Gets transaction by ID (admin)
+     */
     @GetMapping("/admin/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TransactionDTO> getTransactionByIdAdmin(@PathVariable Long id) {
         TransactionDTO transaction = transactionService.getTransactionByIdAdmin(id);
         return ResponseEntity.ok(transaction);
     }
+    /**
+     * Gets transactions for report (user+admin)
+     */
 
     @GetMapping("/user-range")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -132,7 +154,9 @@ public class TransactionController {
         List<TransactionDTO> transactions = transactionService.getTransactionsByUserIdAndDateRange(userIdParam, startDate, endDate);
         return ResponseEntity.ok(transactions);
     }
-
+    /**
+     * Gets transactions by date range (admin)
+     */
     @GetMapping("/admin/all-by-date-range")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TransactionDTO>> getAllTransactionsByDateRangeForAdmin(

@@ -21,7 +21,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+/**
+ * Core statistics calculation service
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +34,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private static final List<String> EXPENSE_TYPES = List.of("WITHDRAWAL", "TRANSFER_SENT");
 
-
+    /**
+     * Calculates spending grouped by category (cached)
+     */
     @Override
     @Cacheable(value = "spendsCategory", key = "#startDate.toString() + '-' + #endDate.toString()")
     public List<SpendByCategoryDTO> calculateSpendByCategory(LocalDate startDate, LocalDate endDate) {
@@ -63,7 +67,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .sorted(Comparator.comparing(SpendByCategoryDTO::getTotalSpent).reversed())
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Finds most active users by transaction count (cached)
+     */
     @Override
     @Cacheable(value = "activeUsers", key = "#startDate.toString() + '-' + #endDate.toString() + '-' + #limit")
     public List<UserActivityDTO> calculateMostActiveUsers(LocalDate startDate, LocalDate endDate, int limit) {
@@ -110,7 +116,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .limit(limit)
                 .collect(Collectors.toList());
     }
-
+    /**
+     * Calculates average account balance (cached)
+     */
     @Override
     @Cacheable("averageBalance")
     public AverageBalanceDTO calculateAverageBalance() {

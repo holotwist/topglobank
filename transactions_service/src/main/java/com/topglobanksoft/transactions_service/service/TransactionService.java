@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
-
+/**
+ * Service for transaction operations
+ */
 public interface TransactionService {
     TransactionDTO performDeposit(String userId, DepositRequestDTO depositRequestDTO);
     TransactionDTO performWithdrawal(String userId, WithdrawalRequestDTO withdrawalRequestDTO);

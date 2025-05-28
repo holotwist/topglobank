@@ -11,12 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+/**
+ * Service for producing balance update events to Kafka
+ */
 public class KafkaProducerServiceImpl implements KafkaProducerService {
     private final KafkaTemplate<String, BalanceUpdateEventDTO> kafkaTemplate;
 
     @Value("${app.kafka.topic.balance-update}") // Injects the topic name
     private String balanceUpdateTopic;
-
+    /**
+     * Sends balance update event to Kafka
+     * @param event Balance update data to send
+     */
     @Override
     public void sendBalanceUpdateEvent(BalanceUpdateEventDTO event) {
         try {

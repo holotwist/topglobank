@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+/**
+ * Transport object for API data exchange
+ */
 public class UserInfoDTO {
     private String idUser;
     private String fullName;

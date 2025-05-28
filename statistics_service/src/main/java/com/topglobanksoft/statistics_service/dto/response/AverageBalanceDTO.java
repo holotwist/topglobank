@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * Transport object for API data exchange
+ */
 public class AverageBalanceDTO {
     private BigDecimal averageBalance;
     private long totalUsersConsidered;

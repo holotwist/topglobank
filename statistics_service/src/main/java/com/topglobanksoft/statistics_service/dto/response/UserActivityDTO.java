@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * Transport object for API data exchange
+ */
 public class UserActivityDTO {
     private String userId;
     private String userName;

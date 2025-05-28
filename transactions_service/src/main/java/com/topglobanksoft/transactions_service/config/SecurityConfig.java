@@ -22,8 +22,13 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+/**
+ * Security configuration for transaction service endpoints
+ */
 public class SecurityConfig {
-
+    /**
+     * Configures security rules for all endpoints
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -46,7 +51,9 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+    /**
+     * Converts JWT roles to Spring Security authorities
+     */
     @Bean
     @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

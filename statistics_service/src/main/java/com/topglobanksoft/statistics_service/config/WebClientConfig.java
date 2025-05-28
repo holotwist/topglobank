@@ -19,7 +19,10 @@ import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * Configures WebClient instances for calling other microservices (User and Transaction services)
+ * with timeout settings and JWT authentication.
+ */
 @Configuration
 public class WebClientConfig {
 
@@ -29,8 +32,10 @@ public class WebClientConfig {
     @Value("${app.client.transaction-service.base-url}")
     private String transactionServiceBaseUrl;
 
-    private final int TIMEOUT = 5000; // 5 seconds
+    // Timeout configuration (5 seconds)
+    private final int TIMEOUT = 5000;
 
+    // Creates configured HttpClient with timeout settings
     private HttpClient httpClient() {
         return HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, TIMEOUT)
@@ -40,6 +45,7 @@ public class WebClientConfig {
                                 .addHandlerLast(new WriteTimeoutHandler(TIMEOUT, TimeUnit.MILLISECONDS)));
     }
 
+    // WebClient for user service with JWT auth
     @Bean
     public WebClient userWebClient(WebClient.Builder builder) {
         return builder
@@ -51,6 +57,7 @@ public class WebClientConfig {
                 .build();
     }
 
+    // WebClient for transaction service with JWT auth
     @Bean
     public WebClient transactionWebClient(WebClient.Builder builder) {
         return builder
@@ -62,9 +69,9 @@ public class WebClientConfig {
                 .build();
     }
 
+    // Adds JWT token from security context to requests
     private ExchangeFilterFunction addJwtTokenFilter() {
         return (clientRequest, next) -> {
-            // For servlet
             return Mono.deferContextual(contextView -> Mono.justOrEmpty(SecurityContextHolder.getContext().getAuthentication())
                     .filter(auth -> auth instanceof JwtAuthenticationToken)
                     .map(auth -> (JwtAuthenticationToken) auth)
@@ -74,8 +81,8 @@ public class WebClientConfig {
                                 .headers(headers -> headers.setBearerAuth(token))
                                 .build();
                     })
-                    .defaultIfEmpty(clientRequest) // If there is no token or it is not JWT, use original request
-                    .flatMap(next::exchange)); // Continuation of the filter/call chain
+                    .defaultIfEmpty(clientRequest)
+                    .flatMap(next::exchange));
         };
     }
 }
