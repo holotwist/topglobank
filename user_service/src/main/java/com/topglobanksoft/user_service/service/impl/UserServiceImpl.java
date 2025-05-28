@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         log.info("User deleted with id: {}", id);
     }
 
-    //Uptadets the balance of a user taking into account operations
+    //Updates the balance of a user taking into account operations
     @Override
     @Transactional
     public void updateUserBalance(String userId, BigDecimal amount, boolean isCredit, String transactionTypeForLog) {
