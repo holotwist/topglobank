@@ -23,6 +23,7 @@ public class TransactionClientServiceImpl implements TransactionClientService {
 
     private final WebClient transaccionesWebClient;
 
+    //Looks for transactions associated with a certain user within a date range from a external service
     @Override
     public Flux<TransactionDTO> getTransactionsByUserAndRange(
             String userId, LocalDate startDate, LocalDate endDate) { // Changed Long to String

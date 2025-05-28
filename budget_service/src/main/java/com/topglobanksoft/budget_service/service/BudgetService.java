@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface BudgetService {
+
+    //Defines the interface to manage budgets
     BudgetDTO createBudget(String userId, BudgetCreateDTO budgetCreateDTO);
     BudgetDTO getBudgetByIdAndUser(Long budgetId, String userId);
     List<BudgetDTO> getBudgetsByUserAndPeriod(String userId, Integer year, Integer month);
@@ -17,5 +19,6 @@ public interface BudgetService {
     BudgetDTO updateBudgetInfo(Long budgetId, String userId, BudgetUpdateDTO budgetUpdateDTO);
     void deleteBudget(Long budgetId, String userId);
 
+    //Updates the SpentAmount of an specific budget asociated to a user
     void updateBudgetSpentAmount(String userId, Long categoryId, int year, int month, BigDecimal spentAmount);
 }

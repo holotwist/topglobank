@@ -13,6 +13,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
+    //Converts users objects into DTO and DTO into users
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserDTO toDto(User user);

@@ -34,7 +34,7 @@ public class AccountController {
         return userId;
     }
 
-
+    //Creates a new account for an authenticated user
     @PostMapping
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AccountDTO> addAccount(@Valid @RequestBody AccountCreateDTO accountCreateDTO,
@@ -52,6 +52,7 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
+    //Obtains all the account associated to a certain user
     @GetMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AccountDTO> getMyAccountById(@PathVariable Long accountId,
@@ -71,6 +72,7 @@ public class AccountController {
         return ResponseEntity.ok(cuentaActualizada);
     }
 
+    //Updates an user´s account
     @DeleteMapping("/{accountId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> deleteMyAccount(@PathVariable Long accountId,
@@ -88,13 +90,8 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
-    @GetMapping("/admin/{accountId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AccountDTO> getAccountByIdAdmin(@PathVariable Long accountId) {
-        AccountDTO cuenta = accountService.getAccountByIdAdmin(accountId);
-        return ResponseEntity.ok(cuenta);
-    }
 
+    //Deletes an account using the ID
     @DeleteMapping("/admin/{accountId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteAccountAdmin(@PathVariable Long accountId) {

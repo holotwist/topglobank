@@ -16,6 +16,7 @@ import java.util.List;
 
 public class PdfReportGenerator {
 
+    //Generates a PDF archive using a list of transactions
     private static final float MARGIN = 50;
     private static final float ROW_HEIGHT = 15;
 

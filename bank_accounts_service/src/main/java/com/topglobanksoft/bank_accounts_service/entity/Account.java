@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
 
+//Defines the JPA entity representing bank account in the database
 @Entity
 @Table(name = "bank_accounts")
 @Data

@@ -23,6 +23,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 
+    //Creates a new bank account asociated to a user
     @Override
     @Transactional
     public AccountDTO addAccount(AccountCreateDTO accountCreateDTO, String userId) { // Changed from Long
@@ -35,6 +36,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(savedAccount);
     }
 
+    //Obtains all bank accounts related to a certain user
     @Override
     @Transactional(readOnly = true)
     public List<AccountDTO> getAccountByUser(String userId) { // Changed from Long
@@ -44,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
     }
 
+    //Obtains a certain account owned by a certain user validating that the user really owns the account
     @Override
     @Transactional(readOnly = true)
     public AccountDTO getAccountByIdAndUser(Long accountId, String userId) { // Changed from Long
@@ -52,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(account);
     }
 
+    //Updates the info of a certain account owned by a certain user
     @Override
     @Transactional
     public AccountDTO updateAccount(Long accountId, String userId, AccountUpdateDTO accountUpdateDTO) { // Changed from Long
@@ -69,6 +73,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(updatedAccount);
     }
 
+    //Deletes an account owned by a user
     @Override
     @Transactional
     public void deleteAccount(Long accountId, String userId) { // Changed from Long
@@ -77,6 +82,7 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.delete(account);
     }
 
+    //Obtains a list with all the accounts registered in the system
     @Override
     @Transactional(readOnly = true)
     public List<AccountDTO> listAllAccountsAdmin() {
@@ -86,6 +92,7 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toList());
     }
 
+    //Obtains the data of a certain account by its id
     @Override
     @Transactional(readOnly = true)
     public AccountDTO getAccountByIdAdmin(Long accountId) {
@@ -94,6 +101,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(account);
     }
 
+    //Deletes an account by its id
     @Override
     @Transactional
     public void deleteAccountAdmin(Long accountId) {

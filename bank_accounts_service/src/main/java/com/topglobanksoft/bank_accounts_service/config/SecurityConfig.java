@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
+    //Protect the routes and uses JWT to authenticate the requests
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -38,23 +38,19 @@ public class SecurityConfig {
 
         return http.build();
     }
-
+    //Converts the JWT token´s roles into authorities to control the access to the protected routes
     @Bean
-    @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        // This converter will extract authorities from the "realm_access.roles" claim
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(token -> {
-            Map<String, Object> realmAccess = token.getClaimAsMap("realm_access");
-            if (realmAccess != null) {
-                Collection<String> roles = (Collection<String>) realmAccess.get("roles");
-                if (roles != null) {
-                    return roles.stream()
-                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
-                            .collect(Collectors.toList());
-                }
-            }
-            return List.of(); // No roles found
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            var realmAccess = jwt.getClaimAsMap("realm_access");
+            var roles = realmAccess != null ? (Collection<String>) realmAccess.get("roles") : null;
+
+            return roles != null
+                    ? roles.stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    .collect(Collectors.toList())
+                    : List.of();
         });
         return converter;
     }

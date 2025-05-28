@@ -13,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CsvReportGenerator {
+    //Generates a CSV archive using a list of transactions
     public static byte[] generate(List<TransactionDTO> transactions) throws IOException {
         final String[] HEADERS = { "Transaction ID", "Date", "Type", "Amount", "Description", "Category Name" };
         ByteArrayOutputStream out = new ByteArrayOutputStream();

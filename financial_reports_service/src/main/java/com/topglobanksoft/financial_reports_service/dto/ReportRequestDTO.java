@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
+//encapsulates and validates the data sent by the user
 public record ReportRequestDTO(
         @NotNull(message = "La fecha de inicio es obligatoria")
         @PastOrPresent(message = "La fecha de inicio no puede ser futura")

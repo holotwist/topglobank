@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//Defines a DTO to transfer data in the app
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,6 +26,7 @@ public class TransactionDTO {
     private CategoryInfoDTO category;
     private Long relatedTransactionId;
 
+    //Represents basic information associated to a transaction
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

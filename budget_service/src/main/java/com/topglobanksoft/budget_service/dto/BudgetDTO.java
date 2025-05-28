@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//Transfers data between layers
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class BudgetDTO {
     private LocalDateTime updateDate;
     private Long version;
 
+    //Calculate the remaining money in the budget
     public BigDecimal getAmountRemaining() {
         if (initialAmount != null && amountSpent != null) {
             return initialAmount.subtract(amountSpent);

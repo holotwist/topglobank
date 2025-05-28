@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//DTO class, represents a balance update event
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

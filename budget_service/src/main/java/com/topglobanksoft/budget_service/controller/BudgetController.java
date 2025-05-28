@@ -28,6 +28,7 @@ public class BudgetController {
 
     private final BudgetService budgetService;
 
+    //Extracts the ID user from the JWT token
     private String getUserIdFromToken(Jwt jwt) { // Changed return type to String
         String userId = jwt.getSubject();
         if (userId == null || userId.isBlank()) {
@@ -37,6 +38,7 @@ public class BudgetController {
         return userId;
     }
 
+    //Creates a new budget
     @PostMapping
     public ResponseEntity<BudgetDTO> createBudget(@Valid @RequestBody BudgetCreateDTO budgetCreateDTO,
                                                   @AuthenticationPrincipal Jwt jwt) {
@@ -45,6 +47,7 @@ public class BudgetController {
         return new ResponseEntity<>(newBudget, HttpStatus.CREATED);
     }
 
+    //Consult an specific budget usind the budget´s id
     @GetMapping("/{budgetId}")
     public ResponseEntity<BudgetDTO> getMyBudgetById(@PathVariable Long budgetId,
                                                      @AuthenticationPrincipal Jwt jwt) {
@@ -53,6 +56,7 @@ public class BudgetController {
         return ResponseEntity.ok(budget);
     }
 
+    //Obtains a list of budgets form a specific year and month
     @GetMapping("/period")
     public ResponseEntity<List<BudgetDTO>> getMyBudgetsByPeriod(
             @RequestParam Integer year,
@@ -63,6 +67,7 @@ public class BudgetController {
         return ResponseEntity.ok(budgets);
     }
 
+    //Obtains a ordered list of all budgets from a specific user
     @GetMapping
     public ResponseEntity<Page<BudgetDTO>> getAllMyBudgets(
             @PageableDefault(size = 10, sort = {"year", "month"}) Pageable pageable,
@@ -72,6 +77,7 @@ public class BudgetController {
         return ResponseEntity.ok(budgetsPage);
     }
 
+    //Updates the information of a budget belonging to a authenticated user
     @PutMapping("/{budgetId}")
     public ResponseEntity<BudgetDTO> updateMyBudgetInfo(@PathVariable Long budgetId,
                                                         @Valid @RequestBody BudgetUpdateDTO budgetUpdateDTO,
@@ -81,6 +87,7 @@ public class BudgetController {
         return ResponseEntity.ok(updatedBudget);
     }
 
+    //Allows an authenticated user to delete a budget they own
     @DeleteMapping("/{budgetId}")
     public ResponseEntity<Void> deleteMyBudget(@PathVariable Long budgetId,
                                                @AuthenticationPrincipal Jwt jwt) {

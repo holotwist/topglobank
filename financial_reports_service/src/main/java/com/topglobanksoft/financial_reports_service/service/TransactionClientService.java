@@ -5,6 +5,8 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDate;
 
 public interface TransactionClientService {
+
+    //Consults reactively the transactios of a certain user within a date range
     Flux<TransactionDTO> getTransactionsByUserAndRange(
             String usuarioId, LocalDate fechaInicio, LocalDate fechaFin);
 }

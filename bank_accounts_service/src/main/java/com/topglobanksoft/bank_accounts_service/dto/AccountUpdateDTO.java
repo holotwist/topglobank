@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+//Used to update accounts
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

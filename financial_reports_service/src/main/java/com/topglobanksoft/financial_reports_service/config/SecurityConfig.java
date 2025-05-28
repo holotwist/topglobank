@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    //Protect the routes and uses JWT to authenticate the requests
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -38,6 +39,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //Converts the JWT token´s roles into authorities to control the access to the protected routes
     @Bean
     @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

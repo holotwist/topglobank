@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+//Handles data base operations related with account
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
 

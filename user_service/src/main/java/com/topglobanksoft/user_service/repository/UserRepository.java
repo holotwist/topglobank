@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+//Allows to do operations with the database related to user without SQL code
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 
