@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     // private final PasswordEncoder passwordEncoder; // Removed
 
+    //Creates a user profile in the database using the JWT token´s data
     @Override
     @Transactional
     public UserDTO provisionUserProfile(UserCreateDTO userCreateDTO, Jwt jwt) {
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(savedUser);
     }
 
+    //obtains the data of a user using its id from the database and returns them as a DTO
     @Override
     @Transactional(readOnly = true)
     public UserDTO getUserById(String id) {
@@ -81,6 +83,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    //find a user using its email and returns them as a DTO
     @Override
     @Transactional(readOnly = true)
     public UserDTO getUserByEmail(String email) {
@@ -89,6 +92,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    //Obtains a list with all the users registered in the database and returns it as a DTO list
     @Override
     @Transactional(readOnly = true)
     public List<UserDTO> listAllUsers() {
@@ -97,6 +101,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    //Updates the data of a certain user and returns it as a DTO
     @Override
     @Transactional
     public UserDTO updateUser(String id, UserUpdateDTO userUpdateDTO) {
@@ -114,6 +119,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(updatedUser);
     }
 
+    //Deletes certain user (only in the database, not in keycloak)
     @Override
     @Transactional
     public void deleteUser(String id) {
@@ -126,6 +132,7 @@ public class UserServiceImpl implements UserService {
         log.info("User deleted with id: {}", id);
     }
 
+    //Uptadets the balance of a user taking into account operations
     @Override
     @Transactional
     public void updateUserBalance(String userId, BigDecimal amount, boolean isCredit, String transactionTypeForLog) {

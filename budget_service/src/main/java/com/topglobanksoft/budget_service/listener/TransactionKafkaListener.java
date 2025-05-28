@@ -22,11 +22,13 @@ public class TransactionKafkaListener {
 
     private final BudgetService budgetService;
 
+    //Defines an static and constant list
     private static final List<TransactionType> EXPENSE_TRANSACTION_TYPES = Arrays.asList(
             TransactionType.WITHDRAWAL,
             TransactionType.TRANSFER_SENT
     );
 
+    //Listens the Kafka messages
     @KafkaListener(topics = "${app.kafka.topic.budget-relevant-transactions}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "budgetKafkaListenerContainerFactory")

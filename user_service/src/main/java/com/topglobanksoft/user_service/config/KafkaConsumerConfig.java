@@ -16,13 +16,16 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 
+//Class to configurate Kaftka
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
 
+    //Injects the value of an external property
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    //Injects the value of an external property
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
 
@@ -30,6 +33,7 @@ public class KafkaConsumerConfig {
     // @Value("${app.kafka.dlt.balance-update-errors}")
     // private String dltTopic;
 
+    //Creates and configurate a @Bean type ConsumerFactory<String, BalanceUpdateEventDTO> to Kaftka
     @Bean
     public ConsumerFactory<String, BalanceUpdateEventDTO> balanceUpdateEventConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
@@ -37,6 +41,7 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         // props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
+        //Creates a JSON deserializer to convert the received messages into Java objects BalanceUpdateEventDTO type
         JsonDeserializer<BalanceUpdateEventDTO> jsonDeserializer = new JsonDeserializer<>(BalanceUpdateEventDTO.class);
         jsonDeserializer.setRemoveTypeHeaders(false);
         // Trust packages for deserialization. Add package from transactions_service if it's different
@@ -54,6 +59,7 @@ public class KafkaConsumerConfig {
         );
     }
 
+    //Defines a Bean that configures ConcurrentKafkaListenerContainerFactory specialiced in consume Kafka messages
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, BalanceUpdateEventDTO> balanceUpdateKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, BalanceUpdateEventDTO> factory =

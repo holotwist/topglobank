@@ -23,6 +23,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final TransactionClientService transactionClientService;
 
+    //Generates a report of all the transactions to a certain user in PDF or CSV format
     @Override
     public byte[] generateReport(String userId, LocalDate startDate, LocalDate endDate, ReportFormat format) { // Changed userId to String
         log.info("Generating report: UserID={}, StartDate={}, EndDate={}, Format={}", userId, startDate, endDate, format);

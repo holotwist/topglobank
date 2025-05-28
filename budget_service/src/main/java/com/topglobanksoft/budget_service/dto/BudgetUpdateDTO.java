@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BudgetUpdateDTO {
+
+    //Defines validation restrictions
     @Size(max = 100, message = "Budget name must be less than 100 characters")
     private String name; // Optional update
 

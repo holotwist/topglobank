@@ -14,6 +14,7 @@ import org.mapstruct.factory.Mappers;
 public interface BudgetMapper {
     BudgetMapper INSTANCE = Mappers.getMapper(BudgetMapper.class);
 
+    //Converts from a budget type object to a budgetDTO
     @Mapping(target = "amountRemaining", ignore = true) // Calculated in DTO getter
     BudgetDTO toDto(Budget budget);
 

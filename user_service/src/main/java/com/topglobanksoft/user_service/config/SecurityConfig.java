@@ -28,6 +28,7 @@ public class SecurityConfig {
 
     // PasswordEncoder bean removed as Keycloak handles passwords
 
+    //Configures the HTTP security
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -52,6 +53,8 @@ public class SecurityConfig {
         return http.build();
     }
 
+
+    //Converts the JWT Roles into authorities
     @Bean
     @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

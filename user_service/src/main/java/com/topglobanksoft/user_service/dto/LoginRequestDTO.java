@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+//DTO who defines restrictions to the data that the user can send
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

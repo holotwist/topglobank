@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    //Defines the HTTP security configuration with SecurityFilterChain
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -38,6 +39,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //Converts the JWT Roles into authorities
     @Bean
     @SuppressWarnings("unchecked")
     public JwtAuthenticationConverter jwtAuthenticationConverter() {

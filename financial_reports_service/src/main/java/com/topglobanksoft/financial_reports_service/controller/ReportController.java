@@ -23,6 +23,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    //Extracts UserId from a JWT token
     private String getUserIdFromToken(Jwt jwt) { // Changed return type to String
         String userId = jwt.getSubject();
         if (userId == null || userId.isBlank()) {
@@ -32,6 +33,7 @@ public class ReportController {
         return userId;
     }
 
+    //Generates a personalized report within a date range in a PDF or CSV format
     @GetMapping("/generate")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<byte[]> generateReport(

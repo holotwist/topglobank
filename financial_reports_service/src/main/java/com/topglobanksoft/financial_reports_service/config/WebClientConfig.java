@@ -16,6 +16,7 @@ public class WebClientConfig {
     @Value("${app.client.transacciones-service.base-url}")
     private String transaccionesServiceBaseUrl;
 
+    //Defines a Bean that configures the webClient
     @Bean
     public WebClient transaccionesWebClient(WebClient.Builder builder) {
         return builder

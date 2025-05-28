@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//DTO class used to transfer data into the app
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

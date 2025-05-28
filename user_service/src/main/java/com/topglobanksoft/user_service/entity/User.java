@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+//Map a table in the DataBase and establishes a unique restriction
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class User {
 
+    //Defines the attributes and behaviours for a JPA entity to a user in the DataBase
     @Version
     private Long version;
 
@@ -68,6 +70,7 @@ public class User {
         }
     }
 
+    //Automatically updates the date of the last modification
     @PreUpdate
     protected void onUpdate() {
         updateDate = LocalDateTime.now();

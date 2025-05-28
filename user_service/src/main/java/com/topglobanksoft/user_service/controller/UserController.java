@@ -51,6 +51,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    //Returns the profile of an authenticated user according to the JWT
     @PutMapping("/me")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<UserDTO> updateMyProfile(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody UserUpdateDTO userUpdateDTO) {

@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Budget {
 
+    //Defines the fields that compose the budget entity in the DataBase
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long budgetId;

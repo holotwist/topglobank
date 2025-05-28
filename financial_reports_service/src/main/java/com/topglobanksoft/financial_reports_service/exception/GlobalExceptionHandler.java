@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+//Handles a series of personalized exceptions to certain errors
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

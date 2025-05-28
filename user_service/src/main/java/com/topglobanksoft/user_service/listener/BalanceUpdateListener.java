@@ -17,6 +17,7 @@ public class BalanceUpdateListener {
 
     private final UserService userService;
 
+    //Listens to messages related to user balance updates
     @KafkaListener(topics = "${app.kafka.topic.balance-update}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "balanceUpdateKafkaListenerContainerFactory")

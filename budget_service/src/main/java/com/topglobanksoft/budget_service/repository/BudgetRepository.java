@@ -25,6 +25,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
     Optional<Budget> findByUserIdAndCategoryIdAndYearAndMonth(
             String userId, Long categoryId, Integer year, Integer month); // Changed
 
+    //Updates the field AmountSpent using SpentAmount
     @Modifying
     @Query("UPDATE Budget b SET b.amountSpent = b.amountSpent + :spentAmount, b.version = b.version + 1 " +
             "WHERE b.userId = :userId AND b.categoryId = :categoryId AND b.year = :year AND b.month = :month " +
@@ -38,6 +39,7 @@ public interface BudgetRepository extends JpaRepository<Budget, Long> {
             @Param("expectedVersion") Long expectedVersion);
 
 
+    //checks if exists a register in the table budget that matches with all the fields
     boolean existsByUserIdAndCategoryIdAndYearAndMonth(
             String userId, Long categoryId, Integer year, Integer month); // Changed
 }

@@ -33,6 +33,7 @@ public class BudgetServiceImpl implements BudgetService {
     private final BudgetRepository budgetRepository;
     private final BudgetMapper budgetMapper;
 
+    //Checks if there is any budget to the same month and year from the same user and saves it in the database
     @Override
     @Transactional
     public BudgetDTO createBudget(String userId, BudgetCreateDTO budgetCreateDTO) { // Changed
@@ -57,6 +58,7 @@ public class BudgetServiceImpl implements BudgetService {
         }
     }
 
+    //Looks for a budget with a certain id and iduser to convert it to a DTO
     @Override
     @Transactional(readOnly = true)
     public BudgetDTO getBudgetByIdAndUser(Long budgetId, String userId) { // Changed
@@ -66,6 +68,7 @@ public class BudgetServiceImpl implements BudgetService {
         return budgetMapper.toDto(budget);
     }
 
+    //Obtains a list of Budgets that matches the user, year and month and organizes them by their ids
     @Override
     @Transactional(readOnly = true)
     public List<BudgetDTO> getBudgetsByUserAndPeriod(String userId, Integer year, Integer month) { // Changed
@@ -73,6 +76,7 @@ public class BudgetServiceImpl implements BudgetService {
         return budgets.stream().map(budgetMapper::toDto).collect(Collectors.toList());
     }
 
+    //Converts a list of budgets into a DTO page
     @Override
     @Transactional(readOnly = true)
     public Page<BudgetDTO> getAllBudgetsByUser(String userId, Pageable pageable) { // Changed
@@ -80,6 +84,7 @@ public class BudgetServiceImpl implements BudgetService {
                 .map(budgetMapper::toDto);
     }
 
+    //Copies the fields of the DTO to the entity budget
     @Override
     @Transactional
     public BudgetDTO updateBudgetInfo(Long budgetId, String userId, BudgetUpdateDTO budgetUpdateDTO) { // Changed
@@ -99,6 +104,7 @@ public class BudgetServiceImpl implements BudgetService {
         }
     }
 
+    //Deletes a certain budget asociated to a user
     @Override
     @Transactional
     public void deleteBudget(Long budgetId, String userId) { // Changed
@@ -109,6 +115,7 @@ public class BudgetServiceImpl implements BudgetService {
         log.info("Budget deleted: ID={}, UserID={}", budgetId, userId);
     }
 
+    //Updates the SpentAmount from a budget usig optimistic locking
     @Override
     @Transactional
     public void updateBudgetSpentAmount(String userId, Long categoryId, int year, int month, BigDecimal spentAmount) { // Changed
